@@ -4,6 +4,49 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
 
 
+class Workout {
+
+    date = new Date();
+    id = (new Date() + '').slice(-10);
+
+    constructor(coords,distance,duration){
+        this.coords=coords;
+        this.distance=distance;
+        this.duration=duration;
+    }
+
+
+
+
+    
+}
+
+
+class Running extends Workout {
+    constructor(coords,distance,duration,cadence){
+        super(coords,distance,duration);
+        this.cadence= cadence;
+        this.calcPace();
+    }
+
+    calcPace(){
+        this.pace = this.duration / this.distance;
+        return this.pace;
+    }
+}
+
+class Cycling extends Workout {
+    constructor(coords,distance,duration,elevationGain){
+        super(coords,distance,duration);
+        this.elevationGain = elevationGain;
+    }
+
+    calcSpeed(){
+        this.speed = this.distance / this.duration / 60 ;
+        return this.speed;
+    }
+}
+
 
 class App{
 
@@ -22,8 +65,6 @@ class App{
 
     constructor(){
 
-        
-        
         this._getPosition();
         this.inputType.addEventListener('change', this._toggleElevationField.bind(this));
         this.form.addEventListener('submit', this._newWorkout.bind(this));
@@ -105,7 +146,3 @@ class App{
 }
 
 const app = new App();
-
-
-
-
