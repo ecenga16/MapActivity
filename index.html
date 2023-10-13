@@ -22,7 +22,7 @@
             <div class="grid grid-cols-2 gap-4 mb-4">
 
                 <div>
-                    <label class="block text-sm font-bold mb-2" for="type">Type</label>
+                    <label class="block text-sm font-bold mb-2 text-gray-200" for="type">Type</label>
                     <select
                         class="form__input form__input--type bg-gray-200 text-gray-800 shadow appearance-none border rounded w-full py-2 px-2 leading-tight focus:outline-none focus:shadow-outline"
                         id="type">
@@ -32,32 +32,32 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold mb-2" for="distance">Distance</label>
+                    <label class="block text-sm font-bold mb-2 text-gray-200" for="distance">Distance</label>
                     <input
                         class="form__input form__input--distance bg-gray-200 text-gray-800 shadow appearance-none border rounded w-full py-2 px-2 leading-tight focus:outline-none focus:shadow-outline"
                         id="distance" type="text" placeholder="km" />
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold mb-2" for="duration">Duration</label>
+                    <label class="block text-sm font-bold mb-2 text-gray-200" for="duration">Duration</label>
                     <input
                         class="form__input form__input--duration bg-gray-200 text-gray-800 shadow appearance-none border rounded w-full py-2 px-2 leading-tight focus:outline-none focus:shadow-outline"
                         id="duration" type="text" placeholder="min" />
                 </div>
 
-                <div>
-                    <label class="block text-sm font-bold mb-2" for="cadence">Cadence</label>
+                <div class="form__row form__row--hidden" id="cadenceRow">
+                    <label class="block text-sm font-bold mb-2 text-gray-200" for="cadence">Cadence</label>
                     <input
                         class="form__input form__input--cadence bg-gray-200 text-gray-800 shadow appearance-none border rounded w-full py-2 px-2 leading-tight focus:outline-none focus:shadow-outline"
                         id="cadence" type="text" placeholder="step/min" />
                 </div>
-            </div>
 
-            <div class="form__row form__row--hidden mb-4">
-                <label class="block text-sm font-bold mb-2" for="elevation">Elev Gain</label>
-                <input
-                    class="form__input form__input--elevation bg-gray-200 text-gray-800 shadow appearance-none border rounded w-full py-2 px-2 leading-tight focus:outline-none focus:shadow-outline"
-                    id="elevation" type="text" placeholder="meters" />
+                <div class="form__row form__row--hidden" id="elevationRow">
+                    <label class="block text-sm font-bold mb-2 text-gray-200" for="elevation">Elev Gain</label>
+                    <input
+                        class="form__input form__input--elevation bg-gray-200 text-gray-800 shadow appearance-none border rounded w-full py-2 px-2 leading-tight focus:outline-none focus:shadow-outline"
+                        id="elevation" type="text" placeholder="meters" />
+                </div>
             </div>
 
             <!-- Form Button -->

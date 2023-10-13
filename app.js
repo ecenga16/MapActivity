@@ -3,61 +3,94 @@
 const months = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'];
 
-const form = document.querySelector('.form');
-const containerWorkouts = document.querySelector('.workouts');
-const inputType = document.querySelector('.form__input--type');
-const inputDistance = document.querySelector('.form__input--distance');
-const inputDuration = document.querySelector('.form__input--duration');
-const inputCadence = document.querySelector('.form__input--cadence');
-const inputElevation = document.querySelector('.form__input--elevation');
 
-let mapEvent;
-let map;
 
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
+class App{
+
+    form = document.querySelector('.form');
+    containerWorkouts = document.querySelector('.workouts');
+    inputType = document.querySelector('.form__input--type');
+    inputDistance = document.querySelector('.form__input--distance');
+    inputDuration = document.querySelector('.form__input--duration');
+    inputCadence = document.querySelector('.form__input--cadence');
+    inputElevation = document.querySelector('.form__input--elevation');
+    
+    
+
+    #map;
+    #mapEvent;
+
+    constructor(){
+
         
+        
+        this._getPosition();
+        this.inputType.addEventListener('change', this._toggleElevationField.bind(this));
+        this.form.addEventListener('submit', this._newWorkout.bind(this));
+
+    }
+
+    _loadMap(position) {
+
         const {latitude} = position.coords;
         const {longitude} = position.coords;
 
         const coords = [latitude,longitude];
         
-        map = L.map('map').setView(coords, 13);
+
+        this.#map = L.map('map').setView(coords, 13);
 
         L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        }).addTo(this.#map);
 
         L.marker(coords)
-            .addTo(map)
+            .addTo(this.#map)
             .bindPopup('Your current Location :)!')
             .openPopup();
 
         
-        map.on('click', function(mapE){
-            mapEvent = mapE;
-            form.classList.remove('hidden');
-            inputDistance.focus();
-            
-        });
+        this.#map.on('click', this._showForm.bind(this));
 
-    }, 
-        function () {
-            alert('Could not get the right location');
-    });
-}
+    }
 
+    _getPosition(){
 
-form.addEventListener('submit', function(e){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition( this._loadMap.bind(this), function () {
+                    alert('Could not get the right location');
+            });
+        }
+
+    }
+
+    _showForm(mapE){
+
+        this.#mapEvent = mapE;
+        this.form.classList.remove('hidden');
+        this.inputDistance.focus();
+
+        
+    }
+
+    _toggleElevationField() {
+        this.inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+        this.inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    }
+
+    _newWorkout(e){
 
         e.preventDefault();
-        const {lat} = mapEvent.latlng;
-        const {lng} = mapEvent.latlng;
+    
+        inputDistance.value = inputDuration.value = inputElevation.value = inputCadence.value = '';
+
+        const {lat} = this.#mapEvent.latlng;
+        const {lng} = this.#mapEvent.latlng;
 
         const pin = [lat,lng];
 
         L.marker(pin)
-        .addTo(map)
+        .addTo(this.#map)
         .bindPopup(L.popup({
             maxWidth: 200,
             minWidth: 100,
@@ -67,4 +100,12 @@ form.addEventListener('submit', function(e){
         .setPopupContent("Your pinned activity!")
         .openPopup();
 
-})
+    }
+
+}
+
+const app = new App();
+
+
+
+
