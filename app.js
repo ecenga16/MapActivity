@@ -11,6 +11,9 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+let mapEvent;
+let map;
+
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
         
@@ -19,8 +22,7 @@ if (navigator.geolocation) {
 
         const coords = [latitude,longitude];
         
-        const map = L.map('map').setView(coords, 13);
-
+        map = L.map('map').setView(coords, 13);
 
         L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -28,10 +30,41 @@ if (navigator.geolocation) {
 
         L.marker(coords)
             .addTo(map)
-            .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+            .bindPopup('Your current Location :)!')
             .openPopup();
 
-    }, function () {
-        alert('Could not get the right location');
+        
+        map.on('click', function(mapE){
+            mapEvent = mapE;
+            form.classList.remove('hidden');
+            inputDistance.focus();
+            
+        });
+
+    }, 
+        function () {
+            alert('Could not get the right location');
     });
 }
+
+
+form.addEventListener('submit', function(e){
+
+        e.preventDefault();
+        const {lat} = mapEvent.latlng;
+        const {lng} = mapEvent.latlng;
+
+        const pin = [lat,lng];
+
+        L.marker(pin)
+        .addTo(map)
+        .bindPopup(L.popup({
+            maxWidth: 200,
+            minWidth: 100,
+            autoClose: false,
+            closeOnClick: false,
+        }))
+        .setPopupContent("Your pinned activity!")
+        .openPopup();
+
+})
