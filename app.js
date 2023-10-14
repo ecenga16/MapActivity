@@ -60,10 +60,12 @@ class App{
 
     #map;
     #mapEvent;
+    #workouts = [];
 
     constructor(){
 
         this._getPosition();
+        this.inputType.value = "cycling";
         this.inputType.addEventListener('change', this._toggleElevationField.bind(this));
         this.form.addEventListener('submit', this._newWorkout.bind(this));
 
@@ -117,14 +119,41 @@ class App{
         this.inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
     }
 
-    _newWorkout(e){
+    _newWorkout(e) {
+        const validInputs = (...inputs) => inputs.every(input => Number.isFinite(input));
+        const allPositive = (...inputs) => inputs.every(input => input > 0);
 
         e.preventDefault();
-    
-        inputDistance.value = inputDuration.value = inputElevation.value = inputCadence.value = '';
 
-        const {lat} = this.#mapEvent.latlng;
-        const {lng} = this.#mapEvent.latlng;
+        const type = this.inputType.value; 
+        const distance = this.inputDistance.value;
+        const duration = this.inputDuration.value;
+        const { lat, lng } = this.#mapEvent.latlng;
+        let workout;
+
+        if (type === 'running') {
+            const cadence = +this.inputCadence.value; 
+            if (
+                !validInputs(distance, duration, cadence) ||
+                !allPositive(distance, duration, cadence)
+            ) return alert('Inputs have to be positive numbers');
+
+            workout = new Running(pin, distance, duration, cadence);
+            this.#workouts.push(workout);
+        }
+
+        if (type === 'cycling') {
+            const elevation = +this.inputElevation.value; 
+            if (
+                !validInputs(distance, duration, elevation) ||
+                !allPositive(distance, duration, elevation)
+            ) return alert('Inputs have to be positive numbers');
+
+            workout = new Cycling(pin, distance, duration, elevation);
+            this.#workouts.push(workout);
+        }
+
+        this.inputDistance.value = this.inputDuration.value = this.inputElevation.value = this.inputCadence.value = '';
 
         const pin = [lat,lng];
 
@@ -138,7 +167,6 @@ class App{
         }))
         .setPopupContent("Your pinned activity!")
         .openPopup();
-
     }
 
 }
